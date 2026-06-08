@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>BY MARDMODS</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #1a4d2a;
+            background-image: linear-gradient(135deg, #0f3b1f 0%, #1f5e33 100%);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .card {
+            background: rgba(255,255,240,0.95);
+            border-radius: 48px;
+            max-width: 600px;
+            width: 100%;
+            padding: 24px 20px 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            backdrop-filter: blur(2px);
+            transition: 0.2s;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3rem;
+            margin: 0 0 8px 0;
+            color: #2c5e2e;
+            letter-spacing: 2px;
+            font-weight: 900;
+            word-break: keep-all;
+        }
+        .sub {
+            color: #3a5a3a;
+            border-left: 4px solid #6fbf4c;
+            padding-left: 14px;
+            margin: 8px 0 20px 0;
+            font-weight: 500;
+            text-align: left;
+        }
+        .file-group {
+            background: #f0f5ea;
+            border-radius: 32px;
+            padding: 18px 16px;
+            margin-bottom: 24px;
+            border: 1px solid #c8e0b0;
+            text-align: left;
+        }
+        label {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: #1e3a1e;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 60px;
+            border: 1px solid #b3cf9b;
+            background: white;
+            font-size: 0.95rem;
+            font-family: monospace;
+        }
+        button {
+            background: #2c7a3e;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: 0.2s;
+            margin-top: 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        button:active {
+            transform: scale(0.97);
+            background: #1e632e;
+        }
+        .status {
+            background: #e9f5e3;
+            border-radius: 40px;
+            padding: 16px 20px;
+            margin: 20px 0 8px;
+            font-size: 0.9rem;
+            font-family: monospace;
+            word-break: break-word;
+            white-space: pre-wrap;
+            border-left: 6px solid #5aae3c;
+            text-align: left;
+        }
+        .loading {
+            background: #fff2cf;
+            border-left-color: #e0a800;
+        }
+        .error {
+            background: #ffe0db;
+            border-left-color: #c7362b;
+        }
+        .success {
+            background: #d9f0cf;
+            border-left-color: #2b7e3a;
+        }
+        .download-btn {
+            background: #1f6e43;
+            margin-top: 12px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+        hr {
+            margin: 20px 0 8px;
+            border: 1px solid #cfe3bc;
+        }
+        .creator {
+            background: #e8f0e2;
+            border-radius: 60px;
+            padding: 12px 18px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+        .creator a {
+            color: #1f6e43;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .hint {
+            font-size: 0.75rem;
+            color: #4a6741;
+            margin-top: 20px;
+            text-align: center;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 16px;
+            color: #446d3a;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>BY MARDMODS</h1>
+
+    <div class="file-group">
+        <label>📦 1. ZIP с именами (PNG)</label>
+        <input type="file" id="zipInput" accept=".zip">
+        <div style="font-size:0.7rem; margin-top:6px;">* Внутри ZIP должны быть .png файлы, названия которых станут будущими именами</div>
+    </div>
+
+    <div class="file-group">
+        <label>🖼️ 2. Твоя фотография дерева</label>
+        <input type="file" id="photoInput" accept="image/jpeg,image/png,image/jpg,image/webp">
+    </div>
+
+    <button id="generateBtn">✨ Создать новый ZIP ✨</button>
+
+    <div id="statusArea" class="status">
+        ⏳ Ожидание загрузки...
+    </div>
+    <div id="downloadArea"></div>
+
+    <div class="creator">
+        🔥 by mardmods · 
+        <a href="https://t.me/mardmods" target="_blank">📱 Telegram канал</a>
+    </div>
+
+    <div class="hint">
+        ⚡ Работает полностью в телефоне / ПК — фото не уходят на сервер.<br>
+        Все имена будут скопированы из PNG внутри ZIP.
+    </div>
+    <footer>▼ Для 10, 190 или 1000+ деревьев — справится мгновенно</footer>
+</div>
+
+<script>
+    (function(){
+        const zipInput = document.getElementById('zipInput');
+        const photoInput = document.getElementById('photoInput');
+        const generateBtn = document.getElementById('generateBtn');
+        const statusArea = document.getElementById('statusArea');
+        const downloadArea = document.getElementById('downloadArea');
+
+        function setStatus(text, type = 'info') {
+            statusArea.innerText = text;
+            statusArea.className = 'status';
+            if (type === 'error') statusArea.classList.add('error');
+            else if (type === 'success') statusArea.classList.add('success');
+            else if (type === 'loading') statusArea.classList.add('loading');
+            else statusArea.classList.remove('error','success','loading');
+        }
+
+        function clearDownload() {
+            downloadArea.innerHTML = '';
+        }
+
+        async function getNamesFromZip(zipFile) {
+            if (typeof JSZip === 'undefined') {
+                await loadJSZip();
+            }
+            const arrayBuffer = await zipFile.arrayBuffer();
+            const zip = await JSZip.loadAsync(arrayBuffer);
+            const names = [];
+            zip.forEach((relativePath, file) => {
+                if (!file.dir && relativePath.toLowerCase().endsWith('.png')) {
+                    let parts = relativePath.split('/');
+                    let baseName = parts[parts.length - 1];
+                    if (baseName.toLowerCase().endsWith('.png')) {
+                        baseName = baseName.slice(0, -4);
+                    }
+                    if (baseName.trim() !== '') {
+                        names.push(baseName);
+                    }
+                }
+            });
+            if (names.length === 0) {
+                throw new Error('ZIP не содержит ни одного .png файла! Проверь структуру.');
+            }
+            return { names, zip };
+        }
+
+        async function imageToPngBuffer(imageFile) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        canvas.toBlob(blob => {
+                            if (!blob) {
+                                reject(new Error('Не удалось конвертировать в PNG'));
+                                return;
+                            }
+                            blob.arrayBuffer().then(buf => {
+                                resolve(new Uint8Array(buf));
+                            }).catch(reject);
+                        }, 'image/png');
+                    };
+                    img.onerror = () => reject(new Error('Ошибка загрузки изображения'));
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => reject(new Error('Не удалось прочитать фото'));
+                reader.readAsDataURL(imageFile);
+            });
+        }
+
+        async function loadJSZip() {
+            if (typeof JSZip !== 'undefined') return;
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error('Не удалось загрузить библиотеку ZIP'));
+                document.head.appendChild(script);
+            });
+        }
+
+        generateBtn.addEventListener('click', async () => {
+            clearDownload();
+            const zipFile = zipInput.files[0];
+            const photoFile = photoInput.files[0];
+
+            if (!zipFile) {
+                setStatus('❌ Выберите ZIP-файл с именами', 'error');
+                return;
+            }
+            if (!photoFile) {
+                setStatus('❌ Загрузите фотографию дерева', 'error');
+                return;
+            }
+
+            setStatus('🔄 Анализируем ZIP и готовим имена...', 'loading');
+            generateBtn.disabled = true;
+
+            try {
+                await loadJSZip();
+                const { names } = await getNamesFromZip(zipFile);
+                setStatus(`📋 Найдено имён: ${names.length} (например: ${names.slice(0,3).join(', ')}${names.length>3 ? '...' : ''})`, 'loading');
+
+                if (names.length === 0) throw new Error('Нет действительных имён');
+                
+                setStatus(`🖌️ Обрабатываем фото → PNG (0/${names.length})`, 'loading');
+                const pngData = await imageToPngBuffer(photoFile);
+                
+                const newZip = new JSZip();
+                for (let i = 0; i < names.length; i++) {
+                    const name = names[i];
+                    const safeName = name.replace(/[/\\?%*:|"<>]/g, '_');
+                    newZip.file(`${safeName}.png`, pngData);
+                    if ((i + 1) % 50 === 0 || i === names.length - 1) {
+                        setStatus(`🏗️ Генерация: добавлено ${i+1} из ${names.length} деревьев...`, 'loading');
+                        await new Promise(r => setTimeout(r, 5));
+                    }
+                }
+
+                setStatus(`📦 Упаковка ZIP (${names.length} файлов)...`, 'loading');
+                const zipBlob = await newZip.generateAsync({ type: 'blob' });
+                const downloadUrl = URL.createObjectURL(zipBlob);
+                
+                const downloadLink = document.createElement('a');
+                downloadLink.href = downloadUrl;
+                downloadLink.download = 'generated_trees.zip';
+                downloadLink.innerText = '📥 СКАЧАТЬ ГОТОВЫЙ ZIP';
+                downloadLink.className = 'download-btn';
+                downloadLink.style.display = 'block';
+                downloadLink.style.textAlign = 'center';
+                downloadLink.style.backgroundColor = '#1f6e43';
+                downloadLink.style.padding = '14px';
+                downloadLink.style.borderRadius = '60px';
+                downloadLink.style.color = 'white';
+                downloadLink.style.textDecoration = 'none';
+                downloadLink.style.fontWeight = 'bold';
+                downloadLink.style.marginTop = '12px';
+                
+                downloadArea.innerHTML = '';
+                downloadArea.appendChild(downloadLink);
+                
+                setStatus(`✅ Готово! Создано ${names.length} деревьев (все фото одинаковые, имена из ZIP). Нажми кнопку ниже.`, 'success');
+                
+            } catch (err) {
+                console.error(err);
+                setStatus(`❌ Ошибка: ${err.message || 'Неизвестная ошибка'}`, 'error');
+            } finally {
+                generateBtn.disabled = false;
+            }
+        });
+
+        setStatus('📁 Загрузи ZIP с именами (PNG) + твоё фото. Нажми "Создать".');
+    })();
+</script>
+</body>
+</html>
